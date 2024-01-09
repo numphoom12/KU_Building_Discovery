@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@material-tailwind/react";
 import IEBuilding from "../../assets/KUbuilding/IEBuilding.png";
 import { useNavigate } from "react-router-dom";
-import ImageUploader from "/Users/aiem/Desktop/SeniorProject/SeniorProjectWeb/client/src/components/ImageUploader/ImageUploader.js";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
 
 const HomePage = () => {
   const navigate = useNavigate();
