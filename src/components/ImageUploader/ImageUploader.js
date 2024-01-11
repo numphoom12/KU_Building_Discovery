@@ -16,21 +16,36 @@ const ImageUploader = () => {
     fileInputRef.current.click();
   };
 
+  // const onFileSelected = (e) => {
+  //   const files = e.target.files;
+  //   if (files.length === 0) return;
+  //   for (let i = 0; i < files.length; i++) {
+  //     if (files[i].type.split("/")[0] !== "image") continue;
+  //     if (!image.some((e) => e.name === files[i].name)) {
+  //       setImage((prevImage) => [
+  //         ...prevImage,
+  //         {
+  //           name: files[i].name,
+  //           url: URL.createObjectURL(files[i]),
+  //         },
+  //       ]);
+  //     }
+  //   }
+
+  //   handleDrop("/result");
+  // };
+
   const onFileSelected = (e) => {
-    const files = e.target.files;
-    if (files.length === 0) return;
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].type.split("/")[0] !== "image") continue;
-      if (!image.some((e) => e.name === files[i].name)) {
-        setImage((prevImage) => [
-          ...prevImage,
-          {
-            name: files[i].name,
-            url: URL.createObjectURL(files[i]),
-          },
-        ]);
-      }
+    const file = e.target.files[0];
+    if (file && file.type.split("/")[0] === "image") {
+      const newImage = {
+        name: file.name,
+        url: URL.createObjectURL(file),
+      };
+      setImage([newImage]);
+      uploadFile(newImage);
     }
+
     handleDrop("/result");
   };
 
@@ -49,25 +64,43 @@ const ImageUploader = () => {
     setIsDragging(false);
   };
 
+  // const onDrop = (e) => {
+  //   e.preventDefault();
+  //   setIsDragging(false);
+  //   const files = e.dataTransfer.files;
+  //   console.log(files);
+
+  //   if (files.length === 0) return;
+  //   for (let i = 0; i < files.length; i++) {
+  //     if (files[i].type.split("/")[0] !== "image") continue;
+  //     if (!image.some((e) => e.name === files[i].name)) {
+  //       setImage((prevImage) => [
+  //         ...prevImage,
+  //         {
+  //           name: files[i].name,
+  //           url: URL.createObjectURL(files[i]),
+  //         },
+  //       ]);
+  //     }
+  //   }
+  //   handleDrop("/result");
+  // };
+
   const onDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    const files = e.dataTransfer.files;
-    console.log(files);
+    const file = e.dataTransfer.files[0];
 
-    if (files.length === 0) return;
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].type.split("/")[0] !== "image") continue;
-      if (!image.some((e) => e.name === files[i].name)) {
-        setImage((prevImage) => [
-          ...prevImage,
-          {
-            name: files[i].name,
-            url: URL.createObjectURL(files[i]),
-          },
-        ]);
-      }
+    if (file && file.type.split("/")[0] === "image") {
+      const newImage = {
+        name: file.name,
+        url: URL.createObjectURL(file),
+      };
+      setImage([newImage]);
+      // Call uploadFile function here
+      uploadFile(newImage);
     }
+
     handleDrop("/result");
   };
 
