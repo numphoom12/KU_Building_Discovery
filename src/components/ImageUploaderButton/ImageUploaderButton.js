@@ -1,10 +1,16 @@
 import { Button } from "@material-tailwind/react";
 import React, { useState, useRef } from "react";
 import { IoMdPhotos } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const ImageUploaderButton = () => {
   const [image, setImage] = useState([]);
   const fileInputRef = useRef(null);
+
+  const navigate = useNavigate();
+  const handleClick = (page) => {
+    navigate(page);
+  };
 
   const selectFile = () => {
     fileInputRef.current.click();
@@ -25,6 +31,7 @@ const ImageUploaderButton = () => {
         ]);
       }
     }
+    handleClick("/result");
   };
 
   const deleteImage = (index) => {

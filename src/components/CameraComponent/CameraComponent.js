@@ -2,13 +2,20 @@ import React, { useState } from "react";
 import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import ImageUploaderButton from "../ImageUploaderButton/ImageUploaderButton";
+import { useNavigate } from "react-router-dom";
 
 const CameraComponent = ({ onTakePhoto }) => {
   const [dataUri, setDataUri] = useState(null);
 
+  const navigate = useNavigate();
+  const handleClick = (page) => {
+    navigate(page);
+  };
+
   const handleTakePhoto = (dataUri) => {
     setDataUri(dataUri);
     onTakePhoto(dataUri);
+    handleClick("/result");
   };
 
   return (

@@ -5,6 +5,9 @@ import Layout from "./layout/Layout";
 import HomePage from "./pages/Home/HomePage";
 import Photo from "./pages/Photo/Photo";
 import Result from "./pages/Result/Result";
+import Manual from "./pages/Manual/Manual";
+//import Wave from "./components/Wave/Wave";
+
 //import History from "./pages/History/History";
 
 function App() {
@@ -17,6 +20,8 @@ function App() {
             element={
               <Layout>
                 <HomePage />
+                <Manual />
+                {/* <Wave /> */}
               </Layout>
             }
           />

@@ -1,6 +1,6 @@
 import React from "react";
 import KUlogo from "../../assets/kasetLogo/KUlogo.png";
-import { Button } from "@material-tailwind/react";
+//import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -29,13 +29,13 @@ const Navbar = () => {
         </button>
 
         <div className="flex gap-3">
-          <Button
+          {/* <Button
             className="rounded-full"
             variant="outlined"
-            onClick={() => handleClick("/result")}
+            onClick={() => handleScroll()}
           >
             History
-          </Button>
+          </Button> */}
         </div>
       </nav>
     </>

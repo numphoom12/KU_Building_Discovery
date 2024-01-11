@@ -30,7 +30,7 @@ const HomePage = () => {
       <div className="flex-1 mx-6">
         <div className="lg:hidden w-full flex flex-col  sm:justify-center sm:items-center">
           <Button
-            className="rounded-full bg-gradient-to-r from-greenPrimary-50 to-greenPrimary-500"
+            className="text-md mt-5 rounded-full bg-gradient-to-r from-greenPrimary-50 to-greenPrimary-500"
             onClick={() => handleClick("/photo")}
           >
             Take a picture
