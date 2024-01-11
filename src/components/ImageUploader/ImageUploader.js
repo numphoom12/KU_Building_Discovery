@@ -1,16 +1,17 @@
 import { Button } from "@material-tailwind/react";
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ImageUploader = () => {
   const [image, setImage] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
-  const navigate = useNavigate();
-  const handleDrop = (page) => {
-    navigate(page);
-  };
+  const [selectedFileName, setSelectedFileName]= useState()
+  // const navigate = useNavigate();
+  // const handleDrop = (page) => {
+  //   navigate(page);
+  // };
 
   const selectFile = () => {
     fileInputRef.current.click();
@@ -35,19 +36,35 @@ const ImageUploader = () => {
   //   handleDrop("/result");
   // };
 
-  const onFileSelected = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.split("/")[0] === "image") {
-      const newImage = {
-        name: file.name,
-        url: URL.createObjectURL(file),
-      };
-      setImage([newImage]);
-      uploadFile(newImage);
-    }
+  // const onFileSelected = (e) => {
+  //   const file = e.target.files[0];
+  //   console.log(file);
+  //   if (file && file.type.split("/")[0] === "image") {
+  //     const newImage = {
+  //       name: file.name,
+  //       url: URL.createObjectURL(file),
+  //     };
+  //     setImage([newImage]);
+  //     uploadFile(newImage);
+  //   }
 
-    handleDrop("/result");
-  };
+  //   handleDrop("/result");
+  // };
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files[0]
+    if (file) {
+      setSelectedFileName(file)
+    }
+  }
+
+  useEffect(() => {
+    if (selectedFileName) {
+      uploadFile()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFileName])
 
   const deleteImage = (index) => {
     setImage((prevImage) => prevImage.filter((_, i) => i !== index));
@@ -89,46 +106,76 @@ const ImageUploader = () => {
   const onDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    const file = e.dataTransfer.files[0];
+    setSelectedFileName(e.dataTransfer.files[0])
+    // const file = e.dataTransfer.files[0];
 
-    if (file && file.type.split("/")[0] === "image") {
-      const newImage = {
-        name: file.name,
-        url: URL.createObjectURL(file),
-      };
-      setImage([newImage]);
-      // Call uploadFile function here
-      uploadFile(newImage);
-    }
+    // if (file && file.type.split("/")[0] === "image") {
+    //   const newImage = {
+    //     name: file.name,
+    //     url: URL.createObjectURL(file),
+    //   };
+    //   setImage([newImage]);
+    //   // Call uploadFile function here
+    //   uploadFile(newImage);
+    // }
 
-    handleDrop("/result");
+    // handleDrop("/result");
+    // uploadFile()
   };
 
-  const uploadFile = async (imageFile) => {
+  // const uploadFile = async (imageFile) => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("image", imageFile);
+  //     console.log("image file detail : ",formData)
+
+  //     const responseUpload = await axios.post("http://localhost:8000/upload", formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     });
+
+  //     // const responsePredict = await axios.post("http://localhost:8000/predict", formData, {
+  //     //   headers: {
+  //     //     "Content-Type": "multipart/form-data",
+  //     //   },
+  //     // });
+
+  //     console.log(
+  //       "Image uploaded successfully:",
+  //       responseUpload,
+  //       "responsePredict: ",
+  //       // responsePredict
+  //     );
+  //   } catch (error) {
+  //     console.log("Error uploading file:", error);
+  //     throw error;
+  //   }
+  // };
+
+  const uploadFile = async () => {
     try {
       const formData = new FormData();
-      formData.append("image", imageFile);
+      formData.append("file", selectedFileName);
 
-      const responseUpload = await axios.post("/upload", formData, {
+      const uploadResponse = await axios.post("http://127.0.0.1:8000/upload", formData,{
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      const responsePredict = await axios.post("/predict", formData, {
+      const predictResponse = await axios.post("http://127.0.0.1:8000/predict", formData,{
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      // console.log(response.data);
 
-      console.log(
-        "Image uploaded successfully:",
-        responseUpload,
-        "responsePredict: ",
-        responsePredict
-      );
+      console.log("Upload", uploadResponse.data)
+      console.log("Predict", predictResponse.data)
+      console.log("MostProb : ", predictResponse.data.mostProbability)
     } catch (error) {
-      console.log("Error uploading file:", error);
+      console.error("Error uploading file:", error);
       throw error;
     }
   };
@@ -163,7 +210,7 @@ const ImageUploader = () => {
           type="file"
           className="file hidden"
           ref={fileInputRef}
-          onChange={onFileSelected}
+          onChange={handleFileChange}
         ></input>
       </div>
 
