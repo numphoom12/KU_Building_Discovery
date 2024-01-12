@@ -1,70 +1,36 @@
 import { Button } from "@material-tailwind/react";
 import React, { useState, useRef, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+import ResultDialog from "../ResultDialog/ResultDialog";
 
 const ImageUploader = () => {
   const [image, setImage] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
-  const [selectedFileName, setSelectedFileName]= useState()
-  // const navigate = useNavigate();
-  // const handleDrop = (page) => {
-  //   navigate(page);
-  // };
+  const [selectedFileName, setSelectedFileName] = useState();
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const [result, setResult] = useState({});
 
   const selectFile = () => {
     fileInputRef.current.click();
   };
 
-  // const onFileSelected = (e) => {
-  //   const files = e.target.files;
-  //   if (files.length === 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!image.some((e) => e.name === files[i].name)) {
-  //       setImage((prevImage) => [
-  //         ...prevImage,
-  //         {
-  //           name: files[i].name,
-  //           url: URL.createObjectURL(files[i]),
-  //         },
-  //       ]);
-  //     }
-  //   }
-
-  //   handleDrop("/result");
-  // };
-
-  // const onFileSelected = (e) => {
-  //   const file = e.target.files[0];
-  //   console.log(file);
-  //   if (file && file.type.split("/")[0] === "image") {
-  //     const newImage = {
-  //       name: file.name,
-  //       url: URL.createObjectURL(file),
-  //     };
-  //     setImage([newImage]);
-  //     uploadFile(newImage);
-  //   }
-
-  //   handleDrop("/result");
-  // };
-  const handleFileChange = async (
-    event
-  ) => {
-    const file = event.target.files[0]
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
     if (file) {
-      setSelectedFileName(file)
+      setSelectedFileName(file);
     }
-  }
+  };
 
   useEffect(() => {
     if (selectedFileName) {
-      uploadFile()
+      uploadFile();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFileName])
+  }, [selectedFileName]);
 
   const deleteImage = (index) => {
     setImage((prevImage) => prevImage.filter((_, i) => i !== index));
@@ -81,104 +47,68 @@ const ImageUploader = () => {
     setIsDragging(false);
   };
 
-  // const onDrop = (e) => {
-  //   e.preventDefault();
-  //   setIsDragging(false);
-  //   const files = e.dataTransfer.files;
-  //   console.log(files);
-
-  //   if (files.length === 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!image.some((e) => e.name === files[i].name)) {
-  //       setImage((prevImage) => [
-  //         ...prevImage,
-  //         {
-  //           name: files[i].name,
-  //           url: URL.createObjectURL(files[i]),
-  //         },
-  //       ]);
-  //     }
-  //   }
-  //   handleDrop("/result");
-  // };
-
   const onDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    setSelectedFileName(e.dataTransfer.files[0])
-    // const file = e.dataTransfer.files[0];
-
-    // if (file && file.type.split("/")[0] === "image") {
-    //   const newImage = {
-    //     name: file.name,
-    //     url: URL.createObjectURL(file),
-    //   };
-    //   setImage([newImage]);
-    //   // Call uploadFile function here
-    //   uploadFile(newImage);
-    // }
-
-    // handleDrop("/result");
-    // uploadFile()
+    setSelectedFileName(e.dataTransfer.files[0]);
   };
-
-  // const uploadFile = async (imageFile) => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("image", imageFile);
-  //     console.log("image file detail : ",formData)
-
-  //     const responseUpload = await axios.post("http://localhost:8000/upload", formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-
-  //     // const responsePredict = await axios.post("http://localhost:8000/predict", formData, {
-  //     //   headers: {
-  //     //     "Content-Type": "multipart/form-data",
-  //     //   },
-  //     // });
-
-  //     console.log(
-  //       "Image uploaded successfully:",
-  //       responseUpload,
-  //       "responsePredict: ",
-  //       // responsePredict
-  //     );
-  //   } catch (error) {
-  //     console.log("Error uploading file:", error);
-  //     throw error;
-  //   }
-  // };
 
   const uploadFile = async () => {
     try {
       const formData = new FormData();
       formData.append("file", selectedFileName);
 
-      const uploadResponse = await axios.post("http://127.0.0.1:8000/upload", formData,{
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const uploadResponse = await axios.post(
+        "http://127.0.0.1:8000/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      const predictResponse = await axios.post("http://127.0.0.1:8000/predict", formData,{
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const predictResponse = await axios.post(
+        "http://127.0.0.1:8000/predict",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       // console.log(response.data);
 
-      console.log("Upload", uploadResponse.data)
-      console.log("Predict", predictResponse.data)
-      console.log("MostProb : ", predictResponse.data.mostProbability)
+      console.log("Upload", uploadResponse.data);
+      console.log("Predict", predictResponse.data);
+      console.log("MostProb : ", predictResponse.data.mostProbability);
+
+      setResult(predictResponse.data);
+      handleDialog();
     } catch (error) {
       console.error("Error uploading file:", error);
       throw error;
     }
   };
+
+  const handleDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  // const result = {
+  //   status: "success",
+  //   prediction: {
+  //     civil: 0.0,
+  //     comoffice: 0.0,
+  //     ie: 0.0,
+  //     mechanic: 0.0,
+  //   },
+  //   mostProbability: "comoffice",
+  // };
 
   return (
     <>
@@ -224,6 +154,12 @@ const ImageUploader = () => {
           </div>
         ))}
       </div>
+      <Button onClick={handleDialog}>Open</Button>
+      <ResultDialog
+        open={openDialog}
+        result={result}
+        onClose={handleCloseDialog}
+      />
     </>
   );
 };
