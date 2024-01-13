@@ -15,24 +15,26 @@ import comofficeImage from "../../assets/KUbuilding/comoffice.jpeg";
 import mechanicImage from "../../assets/KUbuilding/mechanic.jpeg";
 
 const ResultDialog = ({ open, result, onClose }) => {
+
+  // console.log(result.mostProbability)
   const resultImage = {
-    civil: {
+    "Civil building": {
       image: civilImage,
       desc: result?.prediction?.civil,
     },
-    com: {
+    "Com building": {
       image: civilImage,
       desc: result?.prediction?.com,
     },
-    comoffice: {
+    "OSC building": {
       image: comofficeImage,
       desc: result?.prediction?.comoffice,
     },
-    ie: {
+    "IE building": {
       image: ieImage,
       desc: result?.prediction?.ie,
     },
-    mechanic: {
+    "Mecha building": {
       image: mechanicImage,
       desc: result?.prediction?.mechanic,
     },
@@ -53,8 +55,9 @@ const ResultDialog = ({ open, result, onClose }) => {
       <DialogBody>
         <ResultCard
           name={result?.mostProbability}
-          image={resultImage[result?.mostProbability]?.image}
-          desc={resultImage[result?.mostProbability]?.desc}
+          // image={resultImage[result?.mostProbability]?.image}
+          image={resultImage[result?.mostProbability].image}
+          desc={resultImage[result?.mostProbability].desc}
         />
 
         {/* <div>

@@ -154,7 +154,7 @@ const ImageUploader = () => {
           </div>
         ))}
       </div>
-      <Button onClick={handleDialog}>Open</Button>
+      {/* <Button onClick={handleDialog}>Open</Button> */}
       <ResultDialog
         open={openDialog}
         result={result}
