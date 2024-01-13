@@ -51,13 +51,13 @@ const ResultDialog = ({ open, result, onClose }) => {
       onClose={handleClose}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogHeader>{result?.mostProbability}</DialogHeader>
+      <DialogHeader>{result?.mostProbability || ""}</DialogHeader>
       <DialogBody>
         <ResultCard
-          name={result?.mostProbability}
+          name={result?.mostProbability || ""}
           // image={resultImage[result?.mostProbability]?.image}
-          image={resultImage[result?.mostProbability].image}
-          desc={resultImage[result?.mostProbability].desc}
+          image={resultImage[result?.mostProbability]?.image}
+          desc={resultImage[result?.mostProbability]?.desc}
         />
 
         {/* <div>
