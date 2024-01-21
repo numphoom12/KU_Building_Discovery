@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Button,
   Dialog,
@@ -56,14 +56,6 @@ const ResultDialog = ({ open, result, onClose }) => {
           image={resultImage[result?.mostProbability]?.image}
           desc={resultImage[result?.mostProbability]?.desc}
         />
-
-        {/* <div>
-          <img
-            src={resultImage[result?.mostProbability]?.image}
-            alt={result?.mostProbability}
-          />
-          <div>{resultImage[result?.mostProbability]?.desc}</div>
-        </div> */}
       </DialogBody>
       <DialogFooter>
         <Button onClick={handleClose}>Close</Button>
