@@ -3,7 +3,7 @@ import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import ImageUploaderButton from "../ImageUploaderButton/ImageUploaderButton";
 
-const CameraComponent = ({ onTakePhoto }) => {
+const CameraComponent = ({onTakePhoto}) => {
   const [dataUri, setDataUri] = useState(null);
 
   // const navigate = useNavigate();
@@ -23,7 +23,6 @@ const CameraComponent = ({ onTakePhoto }) => {
         // onTakePhoto={(dataUri) => handleTakePhoto(dataUri)}
         onTakePhoto={(dataUri) => {
           handleTakePhoto(dataUri);
-          onTakePhoto();
         }}
         isFullscreen={false}
         idealFacingMode={FACING_MODES.ENVIRONMENT}
