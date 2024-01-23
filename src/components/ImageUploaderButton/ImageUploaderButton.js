@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { IoMdPhotos } from "react-icons/io";
 // import { useNavigate } from "react-router-dom";
 import ResultDialog from "../ResultDialog/ResultDialog";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
 
 const ImageUploaderButton = () => {
@@ -13,6 +15,7 @@ const ImageUploaderButton = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
   const [result, setResult] = useState({});
+  const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
     if (selectedFileName) {
@@ -34,6 +37,7 @@ const ImageUploaderButton = () => {
 
   const uploadFile = async () => {
     try {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append("file", selectedFileName);
 
@@ -63,6 +67,7 @@ const ImageUploaderButton = () => {
       console.log("MostProb : ", predictResponse.data.mostProbability);
 
       setResult(predictResponse.data);
+      setIsLoading(false);
       handleDialog();
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -101,6 +106,14 @@ const ImageUploaderButton = () => {
   };
   return (
     <div className="flex">
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
       <Button className="text-2xl" variant="outlined" onClick={selectFile}>
         <IoMdPhotos />
         <input

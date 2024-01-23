@@ -3,6 +3,8 @@ import CameraComponent from "../../components/CameraComponent/CameraComponent";
 // import ResultDialog from "../ResultDialog/ResultDialog";
 import ResultDialog from "../../components/ResultDialog/ResultDialog";
 import axios from "axios";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Photo = () => {
   const [selectedFileName, setSelectedFileName] = useState();
@@ -12,6 +14,8 @@ const Photo = () => {
   const [result, setResult] = useState({});
 
   const [uri, setUri] = useState();
+  
+  const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
     if (selectedFileName) {
@@ -26,26 +30,25 @@ const Photo = () => {
       console.error("Invalid data URI:", dataURI);
       return null; // Or handle the error in a way that makes sense for your application
     }
-  
+
     const [metadata, actualData] = dataURI.split(",");
     const mime = metadata.match(/:(.*?);/)[1];
-  
+
     const byteString = atob(actualData);
     const arrayBuffer = new ArrayBuffer(byteString.length);
     const uint8Array = new Uint8Array(arrayBuffer);
-  
+
     for (let i = 0; i < byteString.length; i++) {
       uint8Array[i] = byteString.charCodeAt(i);
     }
-  
+
     // Create a Blob after filling the Uint8Array with data
     const blobParse = new Blob([uint8Array], { type: mime });
-  
+
     console.log("Blob", blobParse);
-  
+
     return blobParse;
   }
-  
 
   // const handleTakePhoto = (dataUri) => {
   //   // console.log(first)
@@ -57,6 +60,7 @@ const Photo = () => {
 
   const uploadFile = async () => {
     try {
+      setIsLoading(true)
       const formData = new FormData();
       formData.append("file", selectedFileName);
 
@@ -86,6 +90,7 @@ const Photo = () => {
       console.log("MostProb : ", predictResponse.data.mostProbability);
 
       setResult(predictResponse.data);
+      setIsLoading(false)
       handleDialog();
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -94,12 +99,12 @@ const Photo = () => {
   };
 
   useEffect(() => {
-    if(uri){
-      console.log("uri uri uri uri uri uri",uri)
-      const file = dataURItoBlob(uri)
-      setSelectedFileName(file)
+    if (uri) {
+      console.log("uri uri uri uri uri uri", uri);
+      const file = dataURItoBlob(uri);
+      setSelectedFileName(file);
     }
-  },[uri])
+  }, [uri]);
 
   const handleDialog = () => {
     setOpenDialog(true);
@@ -111,6 +116,15 @@ const Photo = () => {
 
   return (
     <div>
+      <div>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+          // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
       <div className="flex justify-center m-6">
         <CameraComponent onTakePhoto={setUri} />
       </div>

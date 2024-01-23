@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 
 import ResultDialog from "../ResultDialog/ResultDialog";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ImageUploader = () => {
   const [image, setImage] = useState([]);
@@ -13,6 +15,7 @@ const ImageUploader = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
   const [result, setResult] = useState({});
+  const [isLoading, setIsLoading] = useState()
 
   const selectFile = () => {
     fileInputRef.current.click();
@@ -55,6 +58,7 @@ const ImageUploader = () => {
 
   const uploadFile = async () => {
     try {
+      setIsLoading(true)
       const formData = new FormData();
       formData.append("file", selectedFileName);
 
@@ -84,6 +88,7 @@ const ImageUploader = () => {
       console.log("MostProb : ", predictResponse.data.mostProbability);
 
       setResult(predictResponse.data);
+      setIsLoading(false)
       handleDialog();
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -120,6 +125,14 @@ const ImageUploader = () => {
         onDragLeave={onDragLeave}
         onDrop={onDrop}
       >
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+          // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+
         {isDragging ? (
           <span className="font-bold text-gray-600 ">Drop image here</span>
         ) : (

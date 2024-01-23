@@ -17,7 +17,7 @@ const ResultCard = ({ name, image, desc }) => {
   // };
 
   return (
-    <Card className="mt-6 w-96 my-6">
+    <Card className="mt-6 w-96 my-6" >
       <CardHeader color="blue-gray" className="relative h-56">
         <img
           src={image}
