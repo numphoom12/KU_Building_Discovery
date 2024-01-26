@@ -5,6 +5,7 @@ import ResultDialog from "../../components/ResultDialog/ResultDialog";
 import axios from "axios";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { instance } from "../../axiosConfig";
 
 const Photo = () => {
   const [selectedFileName, setSelectedFileName] = useState();
@@ -64,25 +65,28 @@ const Photo = () => {
       const formData = new FormData();
       formData.append("file", selectedFileName);
 
-      const uploadResponse = await axios.post(
-        "http://127.0.0.1:8000/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // const uploadResponse = await axios.post(
+      //   "http://127.0.0.1:8000/upload",
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
 
-      const predictResponse = await axios.post(
-        "http://127.0.0.1:8000/predict",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // const predictResponse = await axios.post(
+      //   "http://127.0.0.1:8000/predict",
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
+
+      const uploadResponse = await instance.post("/upload", formData)
+      const predictResponse = await instance.post("/predict", formData)
       // console.log(response.data);
 
       console.log("Upload", uploadResponse.data);
