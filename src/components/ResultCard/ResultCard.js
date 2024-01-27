@@ -26,10 +26,10 @@ const ResultCard = ({ name, image, desc }) => {
         />
       </CardHeader>
       <CardBody>
-        <Typography variant="h5" color="blue-gray" className="mb-2">
+        <Typography variant="h5" color="blue-gray" className=" font-kanit" >
           {name}
         </Typography>
-        <Typography>{desc}</Typography>
+        {/* <Typography>{desc}</Typography> */}
       </CardBody>
       {/* <CardFooter className="pt-0">
         <Button
